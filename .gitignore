@@ -1,0 +1,58 @@
+# Operating system files
+.DS_Store # macOS folder attributes
+Thumbs.db # Windows image file cache
+desktop.ini # Windows folder settings
+
+# Editor/IDE folders
+.vscode/ # Visual Studio Code settings
+.idea/ # IntelliJ IDEA settings
+*.sublime-workspace # Sublime Text project files
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv
+env/
+venv/
+
+# Java
+*.class
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+
+# C#
+bin/
+obj/
+*.user
+*.userprefs
+*.suo
+*.cache
+*.csproj.user
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Dependency directories (commented out by default)
+# vendor/
+# node_modules/
+
+# Compiled binary addons (Node.js)
+build/Release/
+
+# Environment variables
+.env
