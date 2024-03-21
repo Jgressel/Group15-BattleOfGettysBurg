@@ -26,10 +26,10 @@ breed [confederate-army confederate-soldier]
 turtles-own [union-target confederate-target]
 
 breed [confederate-infantry Cinfantry]
-breed [confederate-cavalry Ccavalry]
+;breed [confederate-cavalry Ccavalry]
 breed [confederate-artillery Cartillery]
 breed [union-infantry Uinfantry]
-breed [union-cavalry Ucavalry]
+;breed [union-cavalry Ucavalry]
 breed [union-artillery Uartillery]
 
 
@@ -70,42 +70,47 @@ to commonSetup
   set time-of-union-retreat ""
   set time-of-confederate-retreat ""
   set time-of-confederate-capture-objective ""
+  ;move-agents-in-arc confederate-infantry 45 10  ;
 
   ; day 2
 
   set turtle-troop-size 100
   set confederate-infantry-starting-points patches at-points [
 
-    [-10 20]
-      [16 36][16 37][16 38][16 39]
-      [15 35][15 36][15 37][15 38]
-      [14 34][14 35][14 36][14 37]
-      [13 34][13 35][13 36]
-      [12 33][12 34][12 35]
-      [11 33][11 34]
+;    [-10 20]
+;      [16 36][16 37][16 38][16 39]
+;      [15 35][15 36][15 37][15 38]
+;      [14 34][14 35][14 36][14 37]
+;      [13 34][13 35][13 36]
+;      [12 33][12 34][12 35]
+;      [11 33][11 34]
+
+    [-6 29][-5 29][-4 29][-6 30];[16 36][16 37][16 38][16 39]
 
     ]
-  set confederate-cavalry-starting-points patches at-points [
-    [-10 6]
-  ]
+
+;  set confederate-cavalry-starting-points patches at-points [
+;    [-10 6]
+;  ]
 
   set confederate-artillery-starting-points patches at-points [
-    [0 40]
+    [-6 30][-5 30] ; [0 40]
   ]
 
     set confederate-objective-points patches at-points [
-      [32 26][32 25][32 24]
-      [33 27][33 26][33 25][33 24]
-      [34 27][34 26][34 25][34 24]
-      [35 26][35 25]
+      ;[32 26][32 25][32 24]
+      ;[33 27][33 26][33 25][33 24]
+      ;[34 27][34 26][34 25][34 24]
+      ;[35 26][35 25]
+    [-1 24]
 
 
     ]
 
     set union-infantry-starting-points patches at-points [
-    [4 31] [4 32][4 33][3 34][1 34]; Slocum
+    ;[4 31] [4 32][4 33][3 34][1 34]; Slocum
     ;[0 34][-1 33][-1 32][-1 31][-1 30][-1 29][-1 28]; Main Hook
-   ; [-4 29][-5 28][-4 28]; Peach Orchard
+    [-5 27][-6 27][-5 26]; Peach Orchard
     ;[-5 26] [-4 26]
 
 
@@ -113,25 +118,25 @@ to commonSetup
      ; [12 24][12 23][12 22][12 21][12 20][12 19][12 18][12 17][12 16][12 15]
     ]
 
-  set union-cavalry-starting-points patches at-points [
-    [10 6]
-  ]
+;  set union-cavalry-starting-points patches at-points [
+;    [10 6]
+;  ]
 
   set union-artillery-starting-points patches at-points [
-    [20 10]
+    [-3 27]
   ]
 
-    set confederate-objective-points patches at-points [
-      [32 26][32 25][32 24]
-      [33 27][33 26][33 25][33 24]
-      [34 27][34 26][34 25][34 24]
-      [35 26][35 25]
-  ]
+;    set union-objective-points patches at-points [
+;      [32 26][32 25][32 24]
+;    ;  [33 27][33 26][33 25][33 24]
+;    ;  [34 27][34 26][34 25][34 24]
+;    ;  [35 26][35 25]
+;  ]
 
     set union-ending-points patches at-points [
       [38 4][38 3]
-      [37 4][37 3]
-      [36 4][36 3]
+     ; [37 4][37 3]
+    ;  [36 4][36 3]
 
 
     ]
@@ -141,8 +146,8 @@ to commonSetup
     ;set run-away-protection-bonus 32
 
     import-drawing "Gettysburg.png"
-    set current-date-time time:create "1863/07/01 16:30"
-    set time-of-day "4:30 PM"
+    set current-date-time time:create "1863/07/02 12:00"
+    set time-of-day "12:00 PM"
     set number-of-confederate-soldiers 5000 / (turtle-troop-size)
     set number-of-union-soldiers 3000 / (turtle-troop-size)
 
@@ -153,9 +158,9 @@ to commonSetup
     set pcolor blue
   ]
 
-    ask union-cavalry-starting-points [
-    set pcolor blue
-  ]
+;    ask union-cavalry-starting-points [
+;    set pcolor blue
+;  ]
 
 
     ask union-artillery-starting-points [
@@ -168,55 +173,93 @@ to commonSetup
      set color red - 2
      move-to one-of confederate-infantry-starting-points
      set shape "person"
-     set size 1  ; Infantry size
+     set size .5  ; Infantry size
   ]
-  create-confederate-cavalry (number-of-confederate-soldiers * 0.3) [
-    set color red - 1
-    move-to one-of confederate-cavalry-starting-points
-    set shape "chess knight"
-    set size 1.5  ; Cavalry size
-  ]
+;  create-confederate-cavalry (number-of-confederate-soldiers * 0.3) [
+;    set color red - 1
+;    move-to one-of confederate-cavalry-starting-points
+;    set shape "chess knight"
+;    set size 1  ; Cavalry size
+;  ]
   create-confederate-artillery (number-of-confederate-soldiers * 0.1) [
     set color red
     move-to one-of confederate-artillery-starting-points
     set shape "cannon"
-    set size 1.5  ; Artillery size
+    set size 1  ; Artillery size
   ]
 
 
-
-
-create-union-army number-of-union-soldiers
   create-union-infantry (number-of-union-soldiers * 0.6) [
     set color blue - 2
     move-to one-of union-infantry-starting-points
     set shape "person"
-    set size 1  ; Infantry size
+    set size .5  ; Infantry size
   ]
-  create-union-cavalry (number-of-union-soldiers * 0.3) [
-    set color blue - 1
-    move-to one-of union-cavalry-starting-points
-    set shape "chess knight"
-    set size 1.5  ; Cavalry size
-  ]
+;  create-union-cavalry (number-of-union-soldiers * 0.3) [
+;    set color blue - 1
+;    move-to one-of union-cavalry-starting-points
+;    set shape "chess knight"
+;    set size 1  ; Cavalry size
+;  ]
   create-union-artillery (number-of-union-soldiers * 0.1) [
     set color blue
     move-to one-of union-artillery-starting-points
-    set shape "default"
-    set size 2  ; Artillery size
+    set shape "cannon"
+    set size 1  ; Artillery size
   ]
+
+
+  ;set ticks-per-minute .1
 
   reset-ticks
 
 end
 
-to go
 
+;  ; if one army is wiped out, end the battle
+;  if not any? confederate-army or not any? union-army [
+;    stopSimulation
+;    stop
+;  ]
+to go
   ; if one army is wiped out, end the battle
   if not any? confederate-army or not any? union-army [
     stopSimulation
     stop
   ]
+
+
+;to move-confederate-infantry-in-arc [angle radius start-x start-y]
+;  let angle-step 5  ; Adjust the angle step for smoother or more pronounced arcs
+;  let center-x -1    ; X-coordinate of the center of the arc
+;  let center-y 2    ; Y-coordinate of the center of the arc
+;  ask confederate-infantry [
+;    let current-angle angle
+;    while [current-angle <= angle + 180] [  ; Loop until reaching the end of the arc (180 degrees)
+;      let rad-angle current-angle / 180 * pi  ; Convert degrees to radians
+;      let new-x center-x - (radius * cos rad-angle)  ; Calculate new x-coordinate
+;      let new-y center-y + (radius * sin rad-angle)  ; Calculate new y-coordinate
+;      setxy new-x new-y  ; Move the agent to the new position
+;      set current-angle current-angle + angle-step  ; Increment the angle
+;      ;tick  ; Update ticks (if using in a model)
+;      if distance patch-here <= 0.1 [  ; Adjust the threshold as needed
+;        stop  ; Stop moving once the agent is close enough to the target position
+;  ]     ]   ] end
+
+
+
+;;;to go
+;;
+;;;   move-confederate-infantry-in-arc 45 40 0 4  ; Move confederate infantry in a 45-degree arc with a radius of 10, starting at coordinates (0, 4)
+;;;   tick;
+;;;;   ask confederate-infantry [
+;;;;    ;setxy 1 6
+;;;;    move-agents-in-arc confederate-infantry 135 20 0 4
+;;;;    ;fd 1            ;; forward 1 step
+;;;;    ;rt 10    ;; turn right
+;;;;  ]
+;;;;  tick
+
 
   ; note the time of when the Confederate Army captures the objective
   if time-of-confederate-capture-objective = "" and (count (confederate-army-on confederate-objective-points) = count confederate-army) [
@@ -234,10 +277,10 @@ to go
       stop
     ]
 
-    time-of-confederate-retreat != "" and (count (confederate-army-on confederate-cavalry-starting-points) = count confederate-army) [
-      stopSimulation
-      stop
-    ]
+;    time-of-confederate-retreat != "" and (count (confederate-army-on confederate-cavalry-starting-points) = count confederate-army) [
+;      stopSimulation
+;      stop
+;    ]
 
     time-of-union-retreat != "" and (count (union-army-on union-ending-points) = count union-army) [
       stopSimulation
@@ -324,6 +367,32 @@ to confederateSoldierAction
 
 end
 
+
+;to confederateSoldierAction
+;  ; Check if confederate-target is nobody or if it's not assigned
+;  ifelse confederate-target = nobody or not any? turtles-on patch-here [
+;    ; Find a new target
+;    set confederate-target one-of union-army  ; Example: Set target to a random union soldier
+;  ] [
+;    ; Continue with existing target
+;    let soldier-being-attacked one-of union-army-here
+;    let closest-enemy one-of union-army in-radius 1
+;
+;    ifelse soldier-being-attacked != nobody [
+;      confederateSoldierAttack soldier-being-attacked
+;      if initial-fight-point = nobody [ set initial-fight-point patch-here]
+;    ] [
+;      ; Handle movement towards the target
+;      if distance confederate-target <= 1 [
+;        move-to confederate-target
+;      ] else [
+;        face confederate-target
+;        fd 1
+;      ]
+;    ]
+;  ]
+;end
+
 to unionSoldierAction
 
   ; do we need to check if a retreat has started?
@@ -333,6 +402,11 @@ to unionSoldierAction
   ifelse time-of-union-retreat != "" [
     unionSoldierRetreat
   ]
+
+;  ifelse union-target = nobody or not any? turtles-on patch-here [
+;    ; Find a new target
+;    set union-target one-of confederate-army  ; Example: Set target to a random union soldier
+;  ]
 
   ; Union Army is not retreating
   [
@@ -345,14 +419,15 @@ to unionSoldierAction
     ][
 
       let closest-enemy min-one-of (confederate-army in-radius 6) [distance myself]
-
       ifelse closest-enemy != nobody and fight-started [
         face closest-enemy
+        ;set union-target one-of confederate-army
         fd 1
       ][
         (
           ifelse not fight-started [
-            face union-target
+          ;  face union-target
+           ; set union-target one-of confederate-army
           ]
 
           [
@@ -451,19 +526,19 @@ to confederateSoldierRetreat
    ]
  ]
 
-  if breed = confederate-cavalry
-  [
-
-  if not is-patch? confederate-cavalry-starting-points [
-    let target-patch min-one-of confederate-cavalry-starting-points [distance myself]
-    ifelse distance target-patch < 2 [
-      move-to one-of confederate-cavalry-starting-points
-    ][
-      face one-of confederate-cavalry-starting-points
-      fd 1
-    ]
-   ]
- ]
+;  if breed = confederate-cavalry
+;  [
+;
+;  if not is-patch? confederate-cavalry-starting-points [
+;    let target-patch min-one-of confederate-cavalry-starting-points [distance myself]
+;    ifelse distance target-patch < 2 [
+;      move-to one-of confederate-cavalry-starting-points
+;    ][
+;      face one-of confederate-cavalry-starting-points
+;      fd 1
+;    ]
+;   ]
+; ]
 
 
 end
@@ -483,8 +558,8 @@ end
 GRAPHICS-WINDOW
 330
 10
-1334
-1015
+1328
+1009
 -1
 -1
 30.0
@@ -501,8 +576,8 @@ GRAPHICS-WINDOW
 16
 -16
 16
-0
-0
+1
+1
 1
 ticks
 30.0
@@ -619,12 +694,12 @@ NIL
 1
 
 INPUTBOX
-2125
-258
-2344
-318
+1599
+48
+1818
+108
 time-of-day
-4:30 PM
+12:00 PM
 1
 0
 String
@@ -638,7 +713,7 @@ confederate-attack-strength
 confederate-attack-strength
 0
 100
-62.0
+34.0
 1
 1
 NIL
@@ -668,7 +743,7 @@ confederate-army-retreats-after-losing-this-percent
 confederate-army-retreats-after-losing-this-percent
 0
 100
-12.0
+88.0
 1
 1
 NIL
@@ -683,7 +758,7 @@ union-army-retreats-after-losing-this-percent
 union-army-retreats-after-losing-this-percent
 0
 100
-14.0
+89.0
 1
 1
 NIL
@@ -698,7 +773,7 @@ run-away-protection-bonus
 run-away-protection-bonus
 0
 100
-32.0
+22.0
 1
 1
 NIL
