@@ -22,7 +22,7 @@ globals [
 
 
 breed [union-army union-soldiers]
-breed [confederate-army confederate-soldier]
+breed [confederate-army confederate-soldiers]
 turtles-own [union-target confederate-target]
 
 breed [confederate-infantry Cinfantry]
@@ -122,7 +122,7 @@ to commonSetup
     set union-infantry-starting-points patches at-points [
     ;[4 31] [4 32][4 33][3 34][1 34]; Slocum
     [0 34][-1 33][-1 32][-1 31][-1 30][-1 29][-1 28]; Main Hook
-    [-5 27][-6 27][-5 26][-4 26][-3 26][-5 25][-4 27]; Peach Orchard
+    [-5 27][-6 27][-5 26][-4 26][-3 26][-5 25][-4 27][-3 27][-3 25][-; Peach Orchard
     ]
 
 ;  set union-cavalry-starting-points patches at-points [
@@ -155,8 +155,8 @@ to commonSetup
     import-drawing "Gettysburg.png"
     set current-date-time time:create "1863/07/02 12:00"
     set time-of-day "12:00 PM"
-    set number-of-confederate-soldiers 17000 / (turtle-troop-size)
-    set number-of-union-soldiers 10000 / (turtle-troop-size)
+    set number-of-confederate-soldiers Set-Confederate-Troops-Count / (turtle-troop-size)
+    set number-of-union-soldiers Set-Union-Troops-Count / (turtle-troop-size)
 
 
 
@@ -237,37 +237,50 @@ to go
   ]
 
 
-    ; note the time of when the Confederate Army captures the objective
-  if time-of-confederate-capture-objective = "" and (count (confederate-army-on confederate-objective-points) = count confederate-army) [
-    set time-of-confederate-capture-objective time-of-day
-  ]
-
-  (
-    ifelse (count (confederate-army-on confederate-objective-points) = count confederate-army) and (count (union-army-on union-ending-points) = count union-army) [
-      stopSimulation
-      stop
-    ]
-
-    time-of-confederate-retreat != "" and (count (confederate-army-on confederate-infantry-starting-points) = count confederate-army) [
-      stopSimulation
-      stop
-    ]
-
-;    time-of-confederate-retreat != "" and (count (confederate-army-on confederate-cavalry-starting-points) = count confederate-army) [
+;    ; note the time of when the Confederate Army captures the objective
+;  if time-of-confederate-capture-objective = "" and (count (confederate-army-on confederate-objective-points) = count confederate-army) [
+;    set time-of-confederate-capture-objective time-of-day
+;  ]
+;
+;  (
+;    ifelse (count (confederate-army-on confederate-objective-points) = count confederate-army) and (count (union-army-on union-ending-points) = count union-army) [
 ;      stopSimulation
 ;      stop
 ;    ]
-
-    time-of-union-retreat != "" and (count (union-army-on union-ending-points) = count union-army) [
-      stopSimulation
-      stop
-    ]
-  )
+;
+;    time-of-confederate-retreat != "" and (count (confederate-army-on confederate-infantry-starting-points) = count confederate-army) [
+;      stopSimulation
+;      stop
+;    ]
+;
+;;    time-of-confederate-retreat != "" and (count (confederate-army-on confederate-cavalry-starting-points) = count confederate-army) [
+;;      stopSimulation
+;;      stop
+;;    ]
+;
+;    time-of-union-retreat != "" and (count (union-army-on union-ending-points) = count union-army) [
+;      stopSimulation
+;      stop
+;    ]
+;  )
 
   ask turtles [
     ifelse breed = confederate-army
     [ confederateSoldierAction ConfederateArtilleryAction]
     [ unionSoldierAction UnionArtilleryAction]
+  ]
+
+    ask turtles [
+    ifelse breed = confederate-infantry
+    [ confederateSoldierAction]
+    [ unionSoldierAction]
+  ]
+
+
+   ask turtles [
+    ifelse breed = confederate-artillery
+    [ ConfederateArtilleryAction]
+    [ UnionArtilleryAction]
   ]
 
   set current-date-time time:plus current-date-time minutes-per-tick "minutes"
@@ -362,7 +375,7 @@ end
        ;   forward 1
         ]
       ]
-  ;  ]
+    ]
 ;  ]
 end
 
@@ -389,13 +402,6 @@ end;
 
   ;  ask union-artillery [
     to UnionArtilleryAction
-   ; ifelse distance patch -5 26 > 6 [
-  ;    ; Move back towards starting position
-   ;   face patch -5 26
-  ;    forward 1
-  ;  ] [
-      ; Stay within range, do nothing
-    ]
        if any? confederate-army [
       let target one-of confederate-army with [health > 0]; Select a valid target
       if target != nobody [  ; Ensure a target is selected
@@ -406,16 +412,16 @@ end;
         ] [
         ]
       ]
-  ;  ]
+    ]
  ; ]
  ; tick
 end
 
 to fight-turtle [attacker target]
   ; Calculate hit based on accuracy rate
-  let hit? (random-float 100 < 40)
+  let hit? (random-float 100 < 30)
   if hit? [
-    let damage 50  ; Fixed damage value
+    let damage 40  ; Fixed damage value
     ask target [
       set health health - damage  ; Reduce health by damage, minimum 0
       if health <= 0 [
@@ -428,9 +434,9 @@ end;
 
 to fight-turtle-artillery [attacker target]
   ; Calculate hit based on accuracy rate
-  let hit? (random-float 100 < 80)
+  let hit? (random-float 100 < 60)
   if hit? [
-    let damage 200
+    let damage 100
     ask target [
       set health health - damage
       if health <= 0 [
@@ -728,10 +734,10 @@ ticks
 30.0
 
 MONITOR
-1279
-426
-1474
-475
+1073
+427
+1269
+477
 Confederate Troops Remaining
 confederate-troop-count
 0
@@ -739,10 +745,10 @@ confederate-troop-count
 12
 
 MONITOR
-1479
-426
-1628
-475
+1075
+533
+1224
+582
 Confederate Casulaties
 confederate-troop-killed
 0
@@ -750,10 +756,10 @@ confederate-troop-killed
 12
 
 MONITOR
-1283
-486
-1476
-535
+1274
+426
+1467
+475
 Union Troops Remaining
 union-troop-count
 0
@@ -761,10 +767,10 @@ union-troop-count
 12
 
 MONITOR
-1479
-488
-1626
-537
+1283
+534
+1430
+583
 Union Casulaties
 union-troop-killed
 0
@@ -772,10 +778,10 @@ union-troop-killed
 12
 
 INPUTBOX
-1109
-572
-1328
-632
+1085
+612
+1304
+672
 time-of-confederate-retreat
 NIL
 1
@@ -783,10 +789,10 @@ NIL
 String
 
 INPUTBOX
-1109
-725
-1328
-785
+1092
+745
+1311
+805
 time-of-confederate-capture-objective
 NIL
 1
@@ -794,10 +800,10 @@ NIL
 String
 
 INPUTBOX
-1109
-646
-1328
-706
+1088
+678
+1307
+738
 time-of-union-retreat
 NIL
 1
@@ -805,10 +811,10 @@ NIL
 String
 
 BUTTON
-1099
-316
-1203
-358
+1073
+214
+1177
+256
 Day 2 Setup
 setupDay2Historical
 NIL
@@ -822,10 +828,10 @@ NIL
 1
 
 BUTTON
-1099
-364
-1204
-404
+1074
+269
+1180
+311
 Go
 go
 T
@@ -839,10 +845,10 @@ NIL
 1
 
 INPUTBOX
-1218
-315
-1437
-375
+1193
+217
+1412
+277
 time-of-day
 12:00 PM
 1
@@ -850,10 +856,10 @@ time-of-day
 String
 
 SLIDER
-1363
-572
-1702
-605
+1358
+612
+1697
+645
 confederate-army-retreats-after-losing-this-percent
 confederate-army-retreats-after-losing-this-percent
 0
@@ -865,10 +871,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-1363
-622
-1664
-655
+1359
+646
+1660
+679
 union-army-retreats-after-losing-this-percent
 union-army-retreats-after-losing-this-percent
 0
@@ -880,10 +886,10 @@ NIL
 HORIZONTAL
 
 MONITOR
-1079
-488
-1266
-537
+1276
+479
+1463
+528
 NIL
 union-infantry-count
 0
@@ -891,15 +897,37 @@ union-infantry-count
 12
 
 MONITOR
-1078
-426
-1266
-475
+1075
+479
+1263
+528
 confederate-infantry-count
 count confederate-infantry * (turtle-troop-size)
 17
 1
 12
+
+INPUTBOX
+1074
+360
+1269
+420
+Set-Confederate-Troops-Count
+15000.0
+1
+0
+Number
+
+INPUTBOX
+1276
+359
+1492
+419
+Set-Union-Troops-Count
+15000.0
+1
+0
+Number
 
 @#$#@#$#@
 ## WHAT IS IT?
