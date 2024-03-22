@@ -1,224 +1,42 @@
-extensions [time]
-
-globals [
- battle-day
-  number-of-confederate-soldiers
-  number-of-union-soldiers
-  confederate-starting-points
-  confederate-infantry-starting-points
-  confederate-cavalry-starting-points
-  confederate-artillery-starting-points
-  confederate-objective-points
-
-  union-infantry-starting-points
-  union-cavalry-starting-points
-  union-artillery-starting-points
-  union-ending-points
-  current-date-time
-  turtle-troop-size
-  initial-fight-point
-  minutes-per-tick
-]
-
-
-breed [union-army union-soldiers]
-breed [confederate-army confederate-soldier]
-turtles-own [union-target confederate-target]
-
-breed [confederate-infantry Cinfantry]
-breed [confederate-cavalry Ccavalry]
-breed [confederate-artillery Cartillery]
-breed [union-infantry Uinfantry]
-breed [union-cavalry Ucavalry]
-breed [union-artillery Uartillery]
-
-
-
-to-report confederate-troop-count
-  report count confederate-army * turtle-troop-size
-end
-
-to-report confederate-troop-killed
-  report (number-of-confederate-soldiers - count confederate-army) * (turtle-troop-size)
-end
-
-to-report union-troop-count
-  report count union-army * (turtle-troop-size)
-end
-
-to-report union-infantry-count
-  report count union-infantry * (turtle-troop-size)
-  end
-
-to-report union-troop-killed
-  report (number-of-union-soldiers - count union-army) * (turtle-troop-size)
-end
-
-to-report fight-started
-  report union-troop-killed > 0 or confederate-troop-killed > 0
-end
-
-to setupDay2Historical
-  clear-all
-  set battle-day 2
-  commonSetup
-end
-
-to commonSetup
-
-  set minutes-per-tick 5
-  set time-of-union-retreat ""
-  set time-of-confederate-retreat ""
-  set time-of-confederate-capture-objective ""
-
-  ; day 2
-
-  set turtle-troop-size 100
-  set confederate-infantry-starting-points patches at-points [
-
-    [-10 20]
-      [16 36][16 37][16 38][16 39]
-      [15 35][15 36][15 37][15 38]
-      [14 34][14 35][14 36][14 37]
-      [13 34][13 35][13 36]
-      [12 33][12 34][12 35]
-      [11 33][11 34]
-
-    ]
-  set confederate-cavalry-starting-points patches at-points [
-    [-10 6]
-  ]
-
-  set confederate-artillery-starting-points patches at-points [
-    [0 40]
-  ]
-
-    set confederate-objective-points patches at-points [
-      [32 26][32 25][32 24]
-      [33 27][33 26][33 25][33 24]
-      [34 27][34 26][34 25][34 24]
-      [35 26][35 25]
-
-
-    ]
-
-    set union-infantry-starting-points patches at-points [
-    [4 31] [4 32][4 33][3 34][1 34]; Slocum
-    ;[0 34][-1 33][-1 32][-1 31][-1 30][-1 29][-1 28]; Main Hook
-   ; [-4 29][-5 28][-4 28]; Peach Orchard
-    ;[-5 26] [-4 26]
-
-
-      ;[13 24][13 23][13 22][13 21][13 20][13 19][13 18][13 17][13 16][13 15][13 14]
-     ; [12 24][12 23][12 22][12 21][12 20][12 19][12 18][12 17][12 16][12 15]
-    ]
-
-  set union-cavalry-starting-points patches at-points [
-    [10 6]
-  ]
-
-  set union-artillery-starting-points patches at-points [
-    [20 10]
-  ]
-
-    set confederate-objective-points patches at-points [
-      [32 26][32 25][32 24]
-      [33 27][33 26][33 25][33 24]
-      [34 27][34 26][34 25][34 24]
-      [35 26][35 25]
-  ]
-
-    set union-ending-points patches at-points [
-      [38 4][38 3]
-      [37 4][37 3]
-      [36 4][36 3]
-
-
-    ]
-
-    ;set confederate-attack-strength 60
-    ;set union-attack-strength 40
-    ;set run-away-protection-bonus 32
-
-    import-drawing "Gettysburg.png"
-    set current-date-time time:create "1863/07/01 16:30"
-    set time-of-day "4:30 PM"
-    set number-of-confederate-soldiers 5000 / (turtle-troop-size)
-    set number-of-union-soldiers 3000 / (turtle-troop-size)
 
 
 
 
-  ask union-infantry-starting-points [
-    set pcolor blue
-  ]
 
-    ask union-cavalry-starting-points [
-    set pcolor blue
-  ]
+;to setup-union-army
+;  create-union-infantry (number-of-union-soldiers * 0.9) [
+;    set health 100;
+;    set color blue - 2
+;    move-to one-of union-infantry-starting-points
+;    set shape "person"
+;    set size .5  ; Infantry size
+;  ]
+;;  create-union-cavalry (number-of-union-soldiers * 0.3) [
+;;    set color blue - 1
+;;    move-to one-of union-cavalry-starting-points
+;;    set shape "chess knight"
+;;    set size 1.5  ; Cavalry size
+;;  ]
+;  create-union-artillery (number-of-union-soldiers * 0.1) [
+;    set health 300;
+;    set color blue
+;    move-to one-of union-artillery-starting-points
+;    set shape "cannon"
+;    set size 1  ; Artillery size
+;  ]
+;end
 
-
-    ask union-artillery-starting-points [
-    set pcolor blue
-  ]
-
-
-  create-confederate-army number-of-confederate-soldiers
-   create-confederate-infantry (number-of-confederate-soldiers * 0.6) [
-     set color red - 2
-     move-to one-of confederate-infantry-starting-points
-     set shape "person"
-     set size 1  ; Infantry size
-  ]
-  create-confederate-cavalry (number-of-confederate-soldiers * 0.3) [
-    set color red - 1
-    move-to one-of confederate-cavalry-starting-points
-    set shape "chess knight"
-    set size 1.5  ; Cavalry size
-  ]
-  create-confederate-artillery (number-of-confederate-soldiers * 0.1) [
-    set color red
-    move-to one-of confederate-artillery-starting-points
-    set shape "cannon"
-    set size 1.5  ; Artillery size
-  ]
-
-
-
-
-create-union-army number-of-union-soldiers
-  create-union-infantry (number-of-union-soldiers * 0.6) [
-    set color blue - 2
-    move-to one-of union-infantry-starting-points
-    set shape "person"
-    set size 1  ; Infantry size
-  ]
-  create-union-cavalry (number-of-union-soldiers * 0.3) [
-    set color blue - 1
-    move-to one-of union-cavalry-starting-points
-    set shape "chess knight"
-    set size 1.5  ; Cavalry size
-  ]
-  create-union-artillery (number-of-union-soldiers * 0.1) [
-    set color blue
-    move-to one-of union-artillery-starting-points
-    set shape "default"
-    set size 2  ; Artillery size
-  ]
-
-  reset-ticks
-
-end
 
 to go
 
-  ; if one army is wiped out, end the battle
+    ; if one army is wiped out, end the battle
   if not any? confederate-army or not any? union-army [
     stopSimulation
     stop
   ]
 
-  ; note the time of when the Confederate Army captures the objective
+
+    ; note the time of when the Confederate Army captures the objective
   if time-of-confederate-capture-objective = "" and (count (confederate-army-on confederate-objective-points) = count confederate-army) [
     set time-of-confederate-capture-objective time-of-day
   ]
@@ -234,10 +52,10 @@ to go
       stop
     ]
 
-    time-of-confederate-retreat != "" and (count (confederate-army-on confederate-cavalry-starting-points) = count confederate-army) [
-      stopSimulation
-      stop
-    ]
+;    time-of-confederate-retreat != "" and (count (confederate-army-on confederate-cavalry-starting-points) = count confederate-army) [
+;      stopSimulation
+;      stop
+;    ]
 
     time-of-union-retreat != "" and (count (union-army-on union-ending-points) = count union-army) [
       stopSimulation
@@ -247,14 +65,152 @@ to go
 
   ask turtles [
     ifelse breed = confederate-army
-    [ confederateSoldierAction ]
-    [ unionSoldierAction ]
+    [ confederateSoldierAction ConfederateArtilleryAction]
+    [ unionSoldierAction UnionArtilleryAction]
   ]
 
   set current-date-time time:plus current-date-time minutes-per-tick "minutes"
   set time-of-day time:show current-date-time "hh:mm a"
   tick
 end
+
+  ; Confederate army moves towards target and fights when within the same patch
+  ;ask confederate-infantry [
+   to confederateSoldierAction
+  checkRetreatStatus
+   ifelse time-of-confederate-retreat != "" [
+    confederateSoldierRetreat
+  ][
+    if any? union-infantry [
+      let target one-of union-infantry with [health > 0]  ; Select a valid target
+      if target != nobody [  ; Ensure a target is selected
+        face target  ; Orient towards the target
+        ifelse distance target <= 1 [
+          ; Fight when within the same patch
+          fight-turtle self target
+        ] [
+          ; Move towards the target
+         ;forward 1
+         forward confederate-target
+        ]
+      ]
+      ;move-to confederate-objective-points ;confederate-target
+    ]
+  ]
+ ; ]
+end
+
+  ; Union army stays within 3 patches of their starting position
+  ;ask union-infantry [
+  to UnionSoldierAction
+  checkRetreatStatus
+   ifelse time-of-union-retreat != "" [
+    unionSoldierRetreat
+  ][
+    ifelse distance patch -5 26 > 36[
+      ; Move back towards starting position
+      face patch -5 26
+      forward 1
+    ] [
+      ; Stay within range, do nothing
+    ]
+       if any? confederate-infantry [
+      let target one-of confederate-infantry with [health > 0]  ; Select a valid target
+      if target != nobody [  ; Ensure a target is selected
+        face target  ; Orient towards the target
+        ifelse distance target <= 1 [
+          ; Fight when within the same patch
+          fight-turtle self target
+        ] [
+          forward 1
+        ]
+      ]
+    ]
+  ]
+;  ]
+end
+
+
+    ;ask confederate-artillery [
+  to ConfederateArtilleryAction
+  checkRetreatStatus
+    ifelse time-of-confederate-retreat != "" [
+    confederateSoldierRetreat
+  ][
+    if any? union-army [
+      let target one-of union-army with [health > 0]  ; Select a valid target
+      if target != nobody [  ; Ensure a target is selected
+        face target  ; Orient towards the target
+        ifelse distance target <= 4 [
+          ; Fight when within the same patch
+          fight-turtle-artillery self target
+        ] [
+          ; Move towards the target
+          forward 1
+         ; forward confederate-target
+        ]
+      ]
+      ;move-to confederate-objective-points ;confederate-target
+    ]
+  ]
+end;
+;  ]
+
+  ;  ask union-artillery [
+    to UnionArtilleryAction
+  checkRetreatStatus
+    ifelse distance patch -5 26 > 6 [
+      ; Move back towards starting position
+      face patch -5 26
+      forward 1
+    ] [
+      ; Stay within range, do nothing
+    ]
+       if any? confederate-army [
+      let target one-of confederate-army with [health > 0]; Select a valid target
+      if target != nobody [  ; Ensure a target is selected
+        face target  ; Orient towards the target
+        ifelse distance target <= 4 [
+          ; Fight when within the same patch
+          fight-turtle-artillery self target
+        ] [
+        ]
+      ]
+    ]
+ ; ]
+ ; tick
+end
+
+to fight-turtle [attacker target]
+  ; Calculate hit based on accuracy rate
+  let hit? (random-float 100 < 40)
+  if hit? [
+    let damage 50  ; Fixed damage value
+    ask target [
+      set health health - damage  ; Reduce health by damage, minimum 0
+      if health <= 0 [
+        die
+      ]
+    ]
+  ]
+
+end;
+
+to fight-turtle-artillery [attacker target]
+  ; Calculate hit based on accuracy rate
+  let hit? (random-float 100 < 80)
+  if hit? [
+    let damage 200
+    ask target [
+      set health health - damage
+      if health <= 0 [
+        die
+      ]
+    ]
+  ]
+
+end;
+
 
 to stopSimulation
   ask confederate-army [
@@ -270,137 +226,170 @@ to stopSimulation
     ]
   ]
 end
-
-to confederateSoldierAction
-  ; do we need to check if a retreat has started?
-  checkRetreatStatus
-
-  ; does the confederate soldier need to retreat?
-  ifelse time-of-confederate-retreat != "" [
-    confederateSoldierRetreat
-  ]
-
-  ; the confederate army is not retreating
-  [
-    ; get a Union soldier if they're occupying the same patch or with
-    let soldier-being-attacked one-of union-army-here
-
-    ; get a Union soldier if they're within a radius of the chase distance
-    let closest-enemy one-of union-army in-radius 1
-
-    (
-      ; does the Confederate soldier have a Union soldier to attack?
-      ifelse soldier-being-attacked != nobody [ ;yes
-
-        confederateSoldierAttack soldier-being-attacked
-
-        ; this is used to make sure the soldier doesn't run too far away from the battle
-        if initial-fight-point = nobody [ set initial-fight-point patch-here]
-      ]
-
-      ; is there a Union soldier near by?
-      closest-enemy != nobody
-      [
-        ; is the Union soldier less than one patch away?
-        ifelse distance closest-enemy <= 1 [
-          move-to closest-enemy
-          confederateSoldierAttack closest-enemy
-        ]
-        [
-
-          ifelse distance confederate-target <= 1 [
-            move-to confederate-target
-          ][
-            face confederate-target
-            fd 1
-          ]
-
-        ]
-      ]
-
-    )
-  ]
-
-
-end
-
-to unionSoldierAction
-
-  ; do we need to check if a retreat has started?
-  checkRetreatStatus
-
-  ; does the union soldier need to retreat?
-  ifelse time-of-union-retreat != "" [
-    unionSoldierRetreat
-  ]
-
-  ; Union Army is not retreating
-  [
-    let soldier-being-attacked one-of confederate-army-here
-
-    ; does the soldier have an enemy on the same patch?
-    ifelse soldier-being-attacked != nobody [
-      ; union soldier attacks the confederate soldier
-      unionSoldierAttack soldier-being-attacked
-    ][
-
-      let closest-enemy min-one-of (confederate-army in-radius 6) [distance myself]
-
-      ifelse closest-enemy != nobody and fight-started [
-        face closest-enemy
-        fd 1
-      ][
-        (
-          ifelse not fight-started [
-            face union-target
-          ]
-
-          [
-
-
-            if closest-enemy != nobody [
-              face closest-enemy
-            ]
-          ]
-        )
-      ]
-    ]
-  ]
-
-end
-
-to confederateSoldierAttack [soldier-being-attacked]
-
-  let attack-strength confederate-attack-strength
-
-  if time-of-union-retreat != "" [
-    set attack-strength (attack-strength - run-away-protection-bonus)
-  ]
-
-  ifelse random-float 100 <= attack-strength [
-    ask soldier-being-attacked [ die ]
-    output-print "Union soldier killed"
-  ][
-    output-print "Union soldier survived"
-  ]
-end
-
-to unionSoldierAttack [soldier-being-attacked]
-
-  let attack-strength union-attack-strength
-
-  if time-of-confederate-retreat != "" [
-    set attack-strength (attack-strength - run-away-protection-bonus)
-  ]
-
-  ifelse random-float 100 <= attack-strength [
-    ask soldier-being-attacked [ die ]
-    output-print "Confederate soldier killed"
-  ][
-    output-print "Confederate soldier survived"
-  ]
-end
-
+;
+;to confederateSoldierAction
+;  ; do we need to check if a retreat has started?
+;  checkRetreatStatus
+;
+;  ; does the confederate soldier need to retreat?
+;  ifelse time-of-confederate-retreat != "" [
+;    confederateSoldierRetreat
+;  ]
+;
+;  ; the confederate army is not retreating
+;  [
+;    ; get a Union soldier if they're occupying the same patch or with
+;    let soldier-being-attacked one-of union-army-here
+;
+;    ; get a Union soldier if they're within a radius of the chase distance
+;    let closest-enemy one-of union-army in-radius 1
+;
+;    (
+;      ; does the Confederate soldier have a Union soldier to attack?
+;      ifelse soldier-being-attacked != nobody [ ;yes
+;
+;        confederateSoldierAttack soldier-being-attacked
+;
+;        ; this is used to make sure the soldier doesn't run too far away from the battle
+;        if initial-fight-point = nobody [ set initial-fight-point patch-here]
+;      ]
+;
+;      ; is there a Union soldier near by?
+;      closest-enemy != nobody
+;      [
+;        ; is the Union soldier less than one patch away?
+;        ifelse distance closest-enemy <= 1 [
+;          move-to closest-enemy
+;          confederateSoldierAttack closest-enemy
+;        ]
+;        [
+;
+;          ifelse distance confederate-target <= 1 [
+;            move-to confederate-target
+;          ][
+;            face confederate-target
+;            fd 1
+;          ]
+;
+;        ]
+;      ]
+;
+;    )
+;  ]
+;
+;
+;end
+;
+;
+;;to confederateSoldierAction
+;;  ; Check if confederate-target is nobody or if it's not assigned
+;;  ifelse confederate-target = nobody or not any? turtles-on patch-here [
+;;    ; Find a new target
+;;    set confederate-target one-of union-army  ; Example: Set target to a random union soldier
+;;  ] [
+;;    ; Continue with existing target
+;;    let soldier-being-attacked one-of union-army-here
+;;    let closest-enemy one-of union-army in-radius 1
+;;
+;;    ifelse soldier-being-attacked != nobody [
+;;      confederateSoldierAttack soldier-being-attacked
+;;      if initial-fight-point = nobody [ set initial-fight-point patch-here]
+;;    ] [
+;;      ; Handle movement towards the target
+;;      if distance confederate-target <= 1 [
+;;        move-to confederate-target
+;;      ] else [
+;;        face confederate-target
+;;        fd 1
+;;      ]
+;;    ]
+;;  ]
+;;end
+;
+;to unionSoldierAction
+;
+;  ; do we need to check if a retreat has started?
+;  checkRetreatStatus
+;
+;  ; does the union soldier need to retreat?
+;  ifelse time-of-union-retreat != "" [
+;    unionSoldierRetreat
+;  ]
+;
+;;  ifelse union-target = nobody or not any? turtles-on patch-here [
+;;    ; Find a new target
+;;    set union-target one-of confederate-army  ; Example: Set target to a random union soldier
+;;  ]
+;
+;  ; Union Army is not retreating
+;  [
+;    let soldier-being-attacked one-of confederate-army-here
+;
+;    ; does the soldier have an enemy on the same patch?
+;    ifelse soldier-being-attacked != nobody [
+;      ; union soldier attacks the confederate soldier
+;      unionSoldierAttack soldier-being-attacked
+;    ][
+;
+;      let closest-enemy min-one-of (confederate-army in-radius 6) [distance myself]
+;
+;      ifelse closest-enemy != nobody and fight-started [
+;        face closest-enemy
+;        ;set union-target one-of confederate-army
+;        fd 1
+;      ][
+;        (
+;          ifelse not fight-started [
+;           ; face union-target
+;           ; set union-target one-of confederate-army
+;          ]
+;
+;          [
+;
+;
+;            if closest-enemy != nobody [
+;              face closest-enemy
+;            ]
+;          ]
+;        )
+;      ]
+;    ]
+;  ]
+;
+;end
+;
+;to confederateSoldierAttack [soldier-being-attacked]
+;
+;  let attack-strength confederate-attack-strength
+;
+;  if time-of-union-retreat != "" [
+;    set attack-strength (attack-strength - run-away-protection-bonus)
+;  ]
+;
+;  ifelse random-float 100 <= attack-strength [
+;    ask soldier-being-attacked [ die ]
+;    output-print "Union soldier killed"
+;  ][
+;    output-print "Union soldier survived"
+;  ]
+;end
+;
+;to unionSoldierAttack [soldier-being-attacked]
+;
+;  let attack-strength union-attack-strength
+;
+;  if time-of-confederate-retreat != "" [
+;    set attack-strength (attack-strength - run-away-protection-bonus)
+;  ]
+;
+;  ifelse random-float 100 <= attack-strength [
+;    ask soldier-being-attacked [ die ]
+;    output-print "Confederate soldier killed"
+;  ][
+;    output-print "Confederate soldier survived"
+;  ]
+;end
+;
 to checkRetreatStatus
   if time-of-confederate-retreat = "" and time-of-union-retreat = "" [ checkConfederateRetreat ]
   if time-of-confederate-retreat = "" and time-of-union-retreat = "" [ checkUnionRetreat ]
@@ -450,24 +439,25 @@ to confederateSoldierRetreat
     ]
    ]
  ]
-
-  if breed = confederate-cavalry
-  [
-
-  if not is-patch? confederate-cavalry-starting-points [
-    let target-patch min-one-of confederate-cavalry-starting-points [distance myself]
-    ifelse distance target-patch < 2 [
-      move-to one-of confederate-cavalry-starting-points
-    ][
-      face one-of confederate-cavalry-starting-points
-      fd 1
-    ]
-   ]
- ]
-
-
 end
 
+;;  if breed = confederate-cavalry
+;;  [
+;;
+;;  if not is-patch? confederate-cavalry-starting-points [
+;;    let target-patch min-one-of confederate-cavalry-starting-points [distance myself]
+;;    ifelse distance target-patch < 2 [
+;;      move-to one-of confederate-cavalry-starting-points
+;;    ][
+;;      face one-of confederate-cavalry-starting-points
+;;      fd 1
+;;    ]
+;;   ]
+;; ]
+;
+;
+;end
+;
 to unionSoldierRetreat
   if not is-patch? union-ending-points [
     let target-patch min-one-of union-ending-points [distance myself]
@@ -481,10 +471,10 @@ to unionSoldierRetreat
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-330
-10
-1328
-1009
+49
+13
+1047
+1012
 -1
 -1
 30.0
@@ -508,10 +498,10 @@ ticks
 30.0
 
 MONITOR
-1582
-334
-1790
-383
+1279
+426
+1474
+475
 Confederate Troops Remaining
 confederate-troop-count
 0
@@ -519,10 +509,10 @@ confederate-troop-count
 12
 
 MONITOR
-1605
-449
-1761
-498
+1479
+426
+1628
+475
 Confederate Casulaties
 confederate-troop-killed
 0
@@ -530,10 +520,10 @@ confederate-troop-killed
 12
 
 MONITOR
-1359
-327
-1524
-376
+1283
+486
+1476
+535
 Union Troops Remaining
 union-troop-count
 0
@@ -541,10 +531,10 @@ union-troop-count
 12
 
 MONITOR
-1638
-147
-1751
-196
+1479
+488
+1626
+537
 Union Casulaties
 union-troop-killed
 0
@@ -552,9 +542,9 @@ union-troop-killed
 12
 
 INPUTBOX
-1603
+1109
 572
-1822
+1328
 632
 time-of-confederate-retreat
 NIL
@@ -563,10 +553,10 @@ NIL
 String
 
 INPUTBOX
-1628
-685
-1847
-745
+1109
+725
+1328
+785
 time-of-confederate-capture-objective
 NIL
 1
@@ -574,22 +564,22 @@ NIL
 String
 
 INPUTBOX
-1713
-788
-1932
-848
+1109
+646
+1328
+706
 time-of-union-retreat
-NIL
+12:00 PM
 1
 0
 String
 
 BUTTON
-1472
-59
-1536
-92
-Day 2
+1099
+316
+1203
+358
+Day 2 Setup
 setupDay2Historical
 NIL
 1
@@ -602,10 +592,10 @@ NIL
 1
 
 BUTTON
-1402
-162
-1465
-195
+1099
+364
+1204
+404
 Go
 go
 T
@@ -619,99 +609,65 @@ NIL
 1
 
 INPUTBOX
-1599
-48
-1818
-108
+1218
+315
+1437
+375
 time-of-day
-4:30 PM
+12:05 PM
 1
 0
 String
 
 SLIDER
-2089
-421
-2298
-454
-confederate-attack-strength
-confederate-attack-strength
-0
-100
-34.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-2094
-486
-2266
-519
-union-attack-strength
-union-attack-strength
-0
-100
-35.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-2098
-560
-2437
-593
+1363
+572
+1702
+605
 confederate-army-retreats-after-losing-this-percent
 confederate-army-retreats-after-losing-this-percent
 0
 100
-88.0
+62.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-2132
-654
-2433
-687
+1363
+622
+1664
+655
 union-army-retreats-after-losing-this-percent
 union-army-retreats-after-losing-this-percent
 0
 100
-89.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-2149
-737
-2351
-770
-run-away-protection-bonus
-run-away-protection-bonus
-0
-100
-22.0
+70.0
 1
 1
 NIL
 HORIZONTAL
 
 MONITOR
-1398
-542
-1542
-591
+1079
+488
+1266
+537
 NIL
 union-infantry-count
 0
+1
+12
+
+MONITOR
+1078
+426
+1266
+475
+confederate-infantry-count
+count union-infantry * (turtle-troop-size)
+17
 1
 12
 

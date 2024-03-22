@@ -103,7 +103,7 @@ to commonSetup
   set confederate-infantry-starting-points patches at-points [
 
 
-    [-6 29][-6 28];[16 36][16 37][16 38][16 39]
+    [-6 29][-6 28][-6 28][-6 27][-5 29][-4 29][-5 28];[16 36][16 37][16 38][16 39]
 
     ]
 
@@ -112,23 +112,16 @@ to commonSetup
 ;  ]
 
   set confederate-artillery-starting-points patches at-points [
-    [-6 27][-5 28][-5 29]
+    [-6 29][-5 30][-4 30]
   ]
 
     set confederate-objective-points patches at-points [
-     ; [32 26][32 25][32 24]
-      ;[33 27][33 26][33 25][33 24]
-      ;[34 27][34 26][34 25][34 24]
-     ; [35 26][35 25]
-
     [-1 24]
-
-
     ]
 
     set union-infantry-starting-points patches at-points [
     ;[4 31] [4 32][4 33][3 34][1 34]; Slocum
-    ;[0 34][-1 33][-1 32][-1 31][-1 30][-1 29][-1 28]; Main Hook
+    [0 34][-1 33][-1 32][-1 31][-1 30][-1 29][-1 28]; Main Hook
     [-5 27][-6 27][-5 26][-4 26][-3 26][-5 25][-4 27]; Peach Orchard
     ]
 
@@ -137,7 +130,7 @@ to commonSetup
 ;  ]
 
   set union-artillery-starting-points patches at-points [
-    [-5 27]
+    [-4 26][-4 27][-3 27][-5 27][-1 32][-1 31][-1 30]
   ]
 
     set confederate-objective-points patches at-points [
@@ -162,7 +155,7 @@ to commonSetup
     import-drawing "Gettysburg.png"
     set current-date-time time:create "1863/07/02 12:00"
     set time-of-day "12:00 PM"
-    set number-of-confederate-soldiers 15000 / (turtle-troop-size)
+    set number-of-confederate-soldiers 17000 / (turtle-troop-size)
     set number-of-union-soldiers 10000 / (turtle-troop-size)
 
 
@@ -183,7 +176,7 @@ to commonSetup
 
 
   create-confederate-army number-of-confederate-soldiers
-   create-confederate-infantry (number-of-confederate-soldiers * 0.9) [
+   create-confederate-infantry (number-of-confederate-soldiers * 0.8) [
      set health 100;
      set color red - 2
      move-to one-of confederate-infantry-starting-points
@@ -196,7 +189,7 @@ to commonSetup
 ;    set shape "chess knight"
 ;    set size 1.5  ; Cavalry size
 ;  ]
-  create-confederate-artillery (number-of-confederate-soldiers * 0.1) [
+  create-confederate-artillery (number-of-confederate-soldiers * 0.2) [
     set health 300;
     set color red
     move-to one-of confederate-artillery-starting-points
@@ -208,7 +201,7 @@ to commonSetup
 
 
 create-union-army number-of-union-soldiers
-  create-union-infantry (number-of-union-soldiers * 0.9) [
+  create-union-infantry (number-of-union-soldiers * 0.8) [
     set health 100;
     set color blue - 2
     move-to one-of union-infantry-starting-points
@@ -221,7 +214,7 @@ create-union-army number-of-union-soldiers
 ;    set shape "chess knight"
 ;    set size 1.5  ; Cavalry size
 ;  ]
-  create-union-artillery (number-of-union-soldiers * 0.1) [
+  create-union-artillery (number-of-union-soldiers * 0.2) [
     set health 300;
     set color blue
     move-to one-of union-artillery-starting-points
@@ -282,10 +275,11 @@ to go
   tick
 end
 
-  ; Confederate army moves towards target and fights when within the same patch
-  ;ask confederate-infantry [
    to confederateSoldierAction
-    if any? union-infantry [
+  ifelse distance patch -1 24 > 2 [
+    face patch -1 24
+    forward 1
+    ifelse any? union-infantry [
       let target one-of union-infantry with [health > 0]  ; Select a valid target
       if target != nobody [  ; Ensure a target is selected
         face target  ; Orient towards the target
@@ -298,21 +292,65 @@ end
          ; forward confederate-target
         ]
       ]
-      ;move-to confederate-objective-points ;confederate-target
+    ][
+     if any? union-artillery [
+      let target one-of union-artillery with [health > 0]  ; Select a valid target
+      if target != nobody [  ; Ensure a target is selected
+        face target  ; Orient towards the target
+        ifelse distance target <= 1 [
+          ; Fight when within the same patch
+          fight-turtle self target
+        ] [
+          ; Move towards the target
+          forward 1
+         ; forward confederate-target
+        ]
+      ]
     ]
+  ]
+  ][
+        ifelse any? union-infantry [
+      let target one-of union-infantry with [health > 0]  ; Select a valid target
+      if target != nobody [  ; Ensure a target is selected
+        face target  ; Orient towards the target
+        ifelse distance target <= 1 [
+          ; Fight when within the same patch
+          fight-turtle self target
+        ] [
+          ; Move towards the target
+          forward 1
+         ; forward confederate-target
+        ]
+      ]
+    ][
+     if any? union-artillery [
+      let target one-of union-artillery with [health > 0]  ; Select a valid target
+      if target != nobody [  ; Ensure a target is selected
+        face target  ; Orient towards the target
+        ifelse distance target <= 1 [
+          ; Fight when within the same patch
+          fight-turtle self target
+        ] [
+          ; Move towards the target
+          forward 1
+         ; forward confederate-target
+        ]
+      ]
+    ]
+  ]
+]
  ; ]
 end
 
-  ; Union army stays within 3 patches of their starting position
   ;ask union-infantry [
   to UnionSoldierAction
-    ifelse distance patch -5 26 > 36[
+  ;  ifelse distance patch -5 26 > 36[
       ; Move back towards starting position
-      face patch -5 26
-      forward 1
-    ] [
+   ;   face patch -5 26
+   ;   forward 1
+   ; ] [
       ; Stay within range, do nothing
-    ]
+   ; ]
        if any? confederate-infantry [
       let target one-of confederate-infantry with [health > 0]  ; Select a valid target
       if target != nobody [  ; Ensure a target is selected
@@ -321,7 +359,7 @@ end
           ; Fight when within the same patch
           fight-turtle self target
         ] [
-          forward 1
+       ;   forward 1
         ]
       ]
     ]
@@ -351,13 +389,13 @@ end;
 
   ;  ask union-artillery [
     to UnionArtilleryAction
-    ifelse distance patch -5 26 > 6 [
-      ; Move back towards starting position
-      face patch -5 26
-      forward 1
-    ] [
+   ; ifelse distance patch -5 26 > 6 [
+  ;    ; Move back towards starting position
+   ;   face patch -5 26
+  ;    forward 1
+  ;  ] [
       ; Stay within range, do nothing
-    ]
+  ;  ]
        if any? confederate-army [
       let target one-of confederate-army with [health > 0]; Select a valid target
       if target != nobody [  ; Ensure a target is selected
@@ -663,10 +701,10 @@ to unionSoldierRetreat
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-330
-10
-1328
-1009
+49
+13
+1047
+1012
 -1
 -1
 30.0
@@ -690,10 +728,10 @@ ticks
 30.0
 
 MONITOR
-1582
-334
-1790
-383
+1279
+426
+1474
+475
 Confederate Troops Remaining
 confederate-troop-count
 0
@@ -701,10 +739,10 @@ confederate-troop-count
 12
 
 MONITOR
-1605
-449
-1761
-498
+1479
+426
+1628
+475
 Confederate Casulaties
 confederate-troop-killed
 0
@@ -712,10 +750,10 @@ confederate-troop-killed
 12
 
 MONITOR
-1359
-327
-1524
-376
+1283
+486
+1476
+535
 Union Troops Remaining
 union-troop-count
 0
@@ -723,10 +761,10 @@ union-troop-count
 12
 
 MONITOR
-1638
-147
-1751
-196
+1479
+488
+1626
+537
 Union Casulaties
 union-troop-killed
 0
@@ -734,9 +772,9 @@ union-troop-killed
 12
 
 INPUTBOX
-1603
+1109
 572
-1822
+1328
 632
 time-of-confederate-retreat
 NIL
@@ -745,10 +783,10 @@ NIL
 String
 
 INPUTBOX
-1628
-685
-1847
-745
+1109
+725
+1328
+785
 time-of-confederate-capture-objective
 NIL
 1
@@ -756,10 +794,10 @@ NIL
 String
 
 INPUTBOX
-1713
-788
-1932
-848
+1109
+646
+1328
+706
 time-of-union-retreat
 NIL
 1
@@ -767,11 +805,11 @@ NIL
 String
 
 BUTTON
-1472
-59
-1536
-92
-Day 2
+1099
+316
+1203
+358
+Day 2 Setup
 setupDay2Historical
 NIL
 1
@@ -784,10 +822,10 @@ NIL
 1
 
 BUTTON
-1402
-162
-1465
-195
+1099
+364
+1204
+404
 Go
 go
 T
@@ -801,10 +839,10 @@ NIL
 1
 
 INPUTBOX
-1599
-48
-1818
-108
+1218
+315
+1437
+375
 time-of-day
 12:00 PM
 1
@@ -812,88 +850,54 @@ time-of-day
 String
 
 SLIDER
-2089
-421
-2298
-454
-confederate-attack-strength
-confederate-attack-strength
-0
-100
-6.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-2094
-486
-2266
-519
-union-attack-strength
-union-attack-strength
-0
-100
-35.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-2098
-560
-2437
-593
+1363
+572
+1702
+605
 confederate-army-retreats-after-losing-this-percent
 confederate-army-retreats-after-losing-this-percent
 0
 100
-12.0
+62.0
 1
 1
 NIL
 HORIZONTAL
 
 SLIDER
-2132
-654
-2433
-687
+1363
+622
+1664
+655
 union-army-retreats-after-losing-this-percent
 union-army-retreats-after-losing-this-percent
 0
 100
-14.0
-1
-1
-NIL
-HORIZONTAL
-
-SLIDER
-2149
-737
-2351
-770
-run-away-protection-bonus
-run-away-protection-bonus
-0
-100
-32.0
+70.0
 1
 1
 NIL
 HORIZONTAL
 
 MONITOR
-1398
-542
-1542
-591
+1079
+488
+1266
+537
 NIL
 union-infantry-count
 0
+1
+12
+
+MONITOR
+1078
+426
+1266
+475
+confederate-infantry-count
+count confederate-infantry * (turtle-troop-size)
+17
 1
 12
 
