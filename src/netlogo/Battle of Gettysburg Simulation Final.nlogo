@@ -885,9 +885,9 @@ to stopSimulation
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
-330
+0
 10
-1328
+998
 1009
 -1
 -1
@@ -912,10 +912,10 @@ ticks
 30.0
 
 MONITOR
-1526
-617
-1734
-666
+1249
+490
+1457
+539
 Confederate Troops Remaining
 confederate-troop-count
 0
@@ -923,10 +923,10 @@ confederate-troop-count
 12
 
 MONITOR
-1527
-677
-1683
-726
+1254
+549
+1410
+598
 Confederate Casualties
 confederate-troop-killed
 0
@@ -934,10 +934,10 @@ confederate-troop-killed
 12
 
 MONITOR
-1348
-618
-1513
-667
+1079
+490
+1244
+539
 Union Troops Remaining
 union-troop-count
 0
@@ -945,10 +945,10 @@ union-troop-count
 12
 
 MONITOR
-1354
-679
-1467
-728
+1131
+547
+1244
+596
 Union Casualties
 union-troop-killed
 0
@@ -956,27 +956,10 @@ union-troop-killed
 12
 
 BUTTON
-1332
+1052
 167
-1791
+1281
 200
-Early Confederate Attack w/ Reinforcements & Union Reinforcements @ 4 PM
-LittleRoundTop_EarlyConfAttack_BothReinforcements
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-1332
-215
-1561
-248
 Start Battle Scenario 1
 Battle1
 T
@@ -995,7 +978,7 @@ INPUTBOX
 2344
 318
 time-of-day
-06:20 p.m.
+06:00 p.m.
 1
 0
 String
@@ -1076,10 +1059,10 @@ NIL
 HORIZONTAL
 
 MONITOR
-1468
-556
-1602
-601
+1178
+436
+1312
+481
 Time
 time-of-day
 17
@@ -1087,27 +1070,10 @@ time-of-day
 11
 
 BUTTON
-1336
-300
-1791
-333
-Historical Confederate Attack w/ Reinforcements & No Union Reinforcements
-LittleRoundTop_HistoricalConfAttack_ConfReinforcementsOnly
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-1337
-344
-1567
-377
+1054
+268
+1284
+301
 Start Battle Scenario 2
 Battle2
 T
@@ -1121,10 +1087,10 @@ NIL
 1
 
 BUTTON
-1332
-43
-1828
-76
+1049
+16
+1545
+49
 Historical Control Scenario - 4 PM Confederate Attack w/ Union Reinforcements Only
 LittleRoundTop_Historical
 NIL
@@ -1138,27 +1104,10 @@ NIL
 1
 
 BUTTON
-1332
-82
-1566
-115
-Start Control Scenario
-HistoricalBattle
-T
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-1
-
-BUTTON
-1336
-417
-1802
-450
+1058
+336
+1524
+369
 Early Confederate Attack w/o Reinforcements & Union Reinforcements @ 4 PM
 LittleRoundTop_EarlyConfAttack_UnionReinforcementsOnly
 NIL
@@ -1172,13 +1121,83 @@ NIL
 1
 
 BUTTON
-1336
-460
-1567
-493
+1059
+376
+1290
+409
 Start Battle Scenario 3
 Battle3
 T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+PLOT
+1060
+628
+1497
+883
+Number of Troop Casualties over Time
+Time
+Casualties
+0.0
+10.0
+0.0
+10.0
+true
+true
+"" ""
+PENS
+"Union" 1.0 0 -14070903 true "" "if (number-of-union-soldiers - count union-army) * (turtle-troop-size) > 0 [ plot (number-of-union-soldiers - count union-army) * (turtle-troop-size) ]"
+"Confederate" 1.0 0 -5298144 true "" "if (number-of-confederate-soldiers - count confederate-army) * (turtle-troop-size) > 0 [ plot (number-of-confederate-soldiers - count confederate-army) * (turtle-troop-size) ]"
+
+BUTTON
+1050
+53
+1284
+86
+Start Control Scenario
+HistoricalBattle
+T
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1052
+129
+1511
+162
+Early Confederate Attack w/ Reinforcements & Union Reinforcements @ 4 PM
+LittleRoundTop_EarlyConfAttack_BothReinforcements
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1054
+231
+1509
+264
+Historical Confederate Attack w/ Reinforcements & No Union Reinforcements
+LittleRoundTop_HistoricalConfAttack_ConfReinforcementsOnly
+NIL
 1
 T
 OBSERVER
