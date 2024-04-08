@@ -978,21 +978,10 @@ INPUTBOX
 1348
 477
 time-of-day
-05:50 PM
+06:00 p.m.
 1
 0
 String
-
-MONITOR
-1354
-418
-1488
-463
-Time
-time-of-day
-17
-1
-11
 
 BUTTON
 1017
