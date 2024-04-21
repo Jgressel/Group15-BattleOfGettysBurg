@@ -346,7 +346,7 @@ to battle_scenario1
     set size .5
     let x-coordinate ifelse-value (random 2 = 0) [ -2 + random-float 2 - .5 ][ -4 + random-float 2 - .5 ]
     let y-coordinate 28 + random-float 1 - .5
-    setxy x-coordinate y-coordinate
+
     ;move-to one-of union-infantry-starting-points
   ]
   create-union-army (number-of-union-soldiers * 0.005) [
@@ -476,7 +476,6 @@ to battle_scenario2
     set size .5
     let x-coordinate ifelse-value (random 2 = 0) [ -2 + random-float 2 - .5 ][ -4 + random-float 2 - .5 ]
     let y-coordinate 28 + random-float 1 - .5
-    setxy x-coordinate y-coordinate
     ;move-to one-of union-infantry-starting-points
   ]
   create-union-army (number-of-union-soldiers * 0.005) [
@@ -606,7 +605,6 @@ to battle_scenario3
     ;move-to one-of union-infantry-starting-points
     let x-coordinate ifelse-value (random 2 = 0) [ -2 + random-float 2 - .5 ][ -4 + random-float 2 - .5 ]
     let y-coordinate 28 + random-float 1 - .5
-    setxy x-coordinate y-coordinate
   ]
   create-union-army (number-of-union-soldiers * 0.005) [
     set shape "cannon"  ; Example shape for artillery
@@ -1007,7 +1005,7 @@ INPUTBOX
 1348
 477
 time-of-day
-4:00 PM
+2:00 PM
 1
 0
 String
